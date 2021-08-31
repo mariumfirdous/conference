@@ -29,16 +29,13 @@ You just need a java compiler. Once you take the code and run , it will give the
 
 •	Input can be dynamic.
 
-•	It can be broken into smaller classes like adding class for session, track, etc to make it more modular.
-
 •	Timings can be converted to 12hour format.
-
-•	Can create a seperate function for displaying.
 
 
 ##Other information
 
 Working program is available at the below link:
+
 http://tpcg.io/QfHj4Bdj 
 
 
