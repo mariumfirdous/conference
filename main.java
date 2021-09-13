@@ -1,25 +1,4 @@
-
-
-public class main{
-    static float calculateTotTime(float time, float sessionDuration) {
-        float totTime = time + sessionDuration;
-        return totTime;
-    }
-
-    static float roundOffValue(float time) {
-        time = Math.round(time * 100.00f) / 100.00f;
-        return time;
-    }
-
-    static float minToHour(float time) {
-        float currMinute = 0;
-        currMinute = time % 1;
-        if (currMinute > 0.60f) {
-            time = (time - 0.60f) + 1.00f;
-        }
-        return time;
-    }
-
+public class Conference {
     static Conf[] initializeArray(Conf[] session) {
         session[0] = new Conf(60, "Writing Fast Tests Against Enterprise Rails 60min");
         session[1] = new Conf(45, "Overdoing it in Python 45min");
@@ -41,18 +20,20 @@ public class main{
         session[17] = new Conf(30, "User Interface CSS in Rails Apps 30min");
         return session;
     }
-
     public static void main(String []args) {
         Conf[] session;
         session = new Conf[18];
         session = initializeArray(session);
+        RoundOffValue  roundVal = new RoundOffValue();
+        MinToHour minHr = new MinToHour();
+        PrintStatements print = new PrintStatements();
 
         float time = 9.00f;
         float totTime = 9.00f;
         boolean lunchDone = false;
         boolean isLunchTime = false;
 
-        System.out.println("Track 1");
+        print.statement("Track 1");
         for (int i = 0; i < session.length; i++) {
             float sessionDuration;
             if (!lunchDone && totTime >= 12) {
@@ -67,26 +48,18 @@ public class main{
                     sessionDuration = session[i].duration / 100;
                 }
             }
-            totTime = calculateTotTime(time, sessionDuration);
-
-            // Round off values
-            totTime = roundOffValue(totTime);
-            time = roundOffValue(time);
-            
-            totTime = minToHour(totTime);
-            
-            // reset all values for second day
+            time = roundVal.roundValue(time);
+            totTime = minHr.toHour(totTime,sessionDuration);
             if (totTime >= 17 && i == 9) {
-                System.out.println("17:00PM Networking");
-                System.out.println("");
-                System.out.println("Track 2");
+                print.statement("17:00PM Networking");
+                print.statement("");
+                print.statement("Track 2");
 
                 time = 9.0f;
                 totTime = 9.0f + sessionDuration;
                 lunchDone = false;
                 isLunchTime = false;
             }
-
             if (isLunchTime && !lunchDone) {
                 System.out.println(time + "PM" + " " + "Lunch");
                 lunchDone = true;
@@ -94,13 +67,49 @@ public class main{
                 session[i].printSession(time);
             time = totTime;
             if (time >= 16 && i == 16) {
-                System.out.println("16.00PM Networking");
+                print.statement("16.00PM Networking");
                 time = totTime + 1.00f;
             }
         }
     }
-
-    public static class Conf{
+    
+    
+public static class PrintStatements {
+    public float statement(String str){
+        System.out.println(str);
+        return 0;
+    }
+}
+public static class RoundOffValue extends CalculateTotTime{
+    public float roundValue(float time,float sessionDuration) {
+        time = super.calculate(time,sessionDuration);
+        time = Math.round(time * 100.00f) / 100.00f;
+        return time;
+    }
+    public float roundValue(float time) {
+        time = Math.round(time * 100.00f) / 100.00f;
+        return time;
+    }
+}
+public static class MinToHour extends RoundOffValue{
+        
+        float currMinute = 0;
+        public float toHour(float time,float sessionDuration){
+        float calculatedTime = super.roundValue(time,sessionDuration);
+        currMinute = calculatedTime % 1;
+        if (currMinute > 0.60f) {
+            calculatedTime = (calculatedTime - 0.60f) + 1.00f;
+        }
+        return calculatedTime;
+    }
+}
+public static class CalculateTotTime{
+    static float calculate(float time, float sessionDuration) {
+        float totTime = time + sessionDuration;
+        return totTime;
+    }
+}
+public static class Conf{
         public float duration;
         public String topic;
     
